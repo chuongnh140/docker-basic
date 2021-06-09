@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+        es:
+                image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+                networks:
+                        - foodtrucks-net
+                ports:
+                        - 9002:9002
+                        - 9003:9003
+                environment:
+                        discovery.type: single-node
+        flask:
+                image: python-compose:0.2
+                build:
+                        context: .
+                        dockerfile: Dockerfile
+                networks:
+                        - foodtrucks-net
+                ports:
+                        - 80:5000
+                depends_on:
+                        - es
+                restart: always
+networks:
+        foodtrucks-net: 
+
